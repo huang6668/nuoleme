@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+  categories:
+    - title: 🚨 报警与提醒可靠性
+      labels:
+        - alarm
+        - notification
+        - reliability
+    - title: ✨ 功能更新
+      labels:
+        - feature
+        - enhancement
+    - title: 🎨 体验与界面
+      labels:
+        - ui
+        - ux
+    - title: 🐛 问题修复
+      labels:
+        - bug
+        - fix
+    - title: 🛠️ 构建、测试与文档
+      labels:
+        - build
+        - ci
+        - docs
+        - test

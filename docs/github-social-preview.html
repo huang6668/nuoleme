@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>挪了么 GitHub Social Preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-1: #07111f;
+        --bg-2: #10253f;
+        --bg-3: #173960;
+        --line: rgba(255, 255, 255, 0.1);
+        --card: rgba(255, 255, 255, 0.08);
+        --text: #f7fbff;
+        --muted: rgba(247, 251, 255, 0.76);
+        --green: #73f0c3;
+        --blue: #87c8ff;
+        --amber: #ffd88c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, rgba(135, 200, 255, 0.18), transparent 32%),
+          radial-gradient(circle at left bottom, rgba(115, 240, 195, 0.16), transparent 28%),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2) 54%, var(--bg-3));
+      }
+
+      .frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 56px 64px;
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, transparent 0, transparent calc(25% - 0.5px), var(--line) 25%, transparent calc(25% + 0.5px)),
+          linear-gradient(to bottom, transparent 0, transparent calc(33.333% - 0.5px), var(--line) 33.333%, transparent calc(33.333% + 0.5px));
+        opacity: 0.3;
+      }
+
+      .header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+        font-size: 28px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+        font-size: 20px;
+        letter-spacing: 0.02em;
+      }
+
+      h1 {
+        position: relative;
+        margin: 0;
+        max-width: 860px;
+        font-size: 72px;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+      }
+
+      .subtitle {
+        position: relative;
+        margin-top: 18px;
+        max-width: 840px;
+        font-size: 30px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .chips {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 40px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: var(--card);
+        font-size: 22px;
+        color: #eef8ff;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+
+      .footer {
+        position: absolute;
+        left: 64px;
+        right: 64px;
+        bottom: 56px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .note {
+        max-width: 600px;
+        font-size: 24px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .repo {
+        font-size: 24px;
+        color: rgba(247, 251, 255, 0.9);
+        letter-spacing: 0.01em;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="frame">
+      <div class="grid"></div>
+
+      <section class="header">
+        <div class="logo">🚗</div>
+        <div class="badge">挪车短信命中后，更像闹铃，不只是普通通知</div>
+      </section>
+
+      <h1>挪了么</h1>
+      <div class="subtitle">
+        离线、零常驻的 Android 挪车短信提醒 App。收到挪车短信后，
+        尽量用系统闹铃与全屏提醒把你叫出来。
+      </div>
+
+      <section class="chips">
+        <div class="chip"><span class="dot" style="background: var(--green)"></span>系统闹铃语义</div>
+        <div class="chip"><span class="dot" style="background: var(--blue)"></span>锁屏 / 息屏尽量不漏</div>
+        <div class="chip"><span class="dot" style="background: var(--amber)"></span>不联网，不常驻后台</div>
+      </section>
+
+      <footer class="footer">
+        <div class="note">
+          平时尽量安静，命中短信后尽量明显。<br />
+          只做挪车提醒，不做重后台、云同步和多余权限。
+        </div>
+        <div class="repo">github.com/huang6668/nuoleme</div>
+      </footer>
+    </main>
+  </body>
+</html>
