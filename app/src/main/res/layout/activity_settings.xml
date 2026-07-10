@@ -2,11 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootContent"
+    android:id="@+id/settingsRootContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_background"
-    tools:context=".MainActivity">
+    tools:context=".SettingsActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -35,42 +35,42 @@
                     android:padding="24dp">
 
                     <ImageView
-                        android:id="@+id/imageHeroIcon"
+                        android:id="@+id/imageSettingsIcon"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:contentDescription="@string/app_name"
+                        android:contentDescription="@string/settings_title"
                         android:src="@drawable/ic_car"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@android:color/white" />
 
                     <TextView
-                        android:id="@+id/textAppName"
+                        android:id="@+id/textSettingsTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@string/app_name"
+                        android:text="@string/settings_title"
                         android:textColor="@android:color/white"
-                        android:textSize="32sp"
+                        android:textSize="30sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/imageHeroIcon" />
+                        app:layout_constraintTop_toBottomOf="@id/imageSettingsIcon" />
 
                     <TextView
-                        android:id="@+id/textSubtitle"
+                        android:id="@+id/textSettingsSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@string/app_subtitle"
+                        android:text="@string/settings_subtitle"
                         android:textColor="@android:color/white"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textAppName" />
+                        app:layout_constraintTop_toBottomOf="@id/textSettingsTitle" />
 
                     <TextView
-                        android:id="@+id/textHeaderBadge"
+                        android:id="@+id/textSettingsBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -79,11 +79,11 @@
                         android:paddingTop="6dp"
                         android:paddingEnd="12dp"
                         android:paddingBottom="6dp"
-                        android:text="@string/header_badge"
+                        android:text="@string/settings_header_badge"
                         android:textColor="@color/brand_primary"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textSubtitle" />
+                        app:layout_constraintTop_toBottomOf="@id/textSettingsSubtitle" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -104,7 +104,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/card_guard_title"
+                        android:text="@string/card_status_title"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -113,35 +113,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_summary"
+                        android:text="@string/card_status_summary"
                         android:textColor="?attr/colorOnSurfaceVariant" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switchGuardEnabled"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="@string/home_toggle_label"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textGuardStateTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        tools:text="后台守护已开启" />
-
-                    <TextView
-                        android:id="@+id/textGuardStateSummary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="15sp"
-                        tools:text="现在可以直接返回桌面。收到命中短信时，系统会唤醒挪了么并拉起报警流程。" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="match_parent"
@@ -150,14 +123,6 @@
                         app:chipSpacingHorizontal="8dp"
                         app:chipSpacingVertical="8dp"
                         app:singleLine="false">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipEnabledStatus"
-                            style="@style/Widget.Nuolemo.StatusChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="false"
-                            tools:text="后台守护已开启" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipSmsPermission"
@@ -183,6 +148,30 @@
                             android:checkable="false"
                             tools:text="全屏提醒可用" />
                     </com.google.android.material.chip.ChipGroup>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonRequestSms"
+                        style="@style/Widget.Nuolemo.Button.Tonal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/button_request_sms" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonRequestNotifications"
+                        style="@style/Widget.Nuolemo.Button.Tonal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_request_notifications" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonFullScreenSettings"
+                        style="@style/Widget.Nuolemo.Button.Outlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_full_screen_settings" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -202,7 +191,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/card_guard_rules_title"
+                        android:text="@string/card_rules_title"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -211,27 +200,107 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_rules_summary"
+                        android:text="@string/settings_helper_rules"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <TextView
-                        android:id="@+id/textRuleSummary"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Nuolemo.TextInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:text="关键词 8 条，车牌 2 个" />
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/field_keywords"
+                        app:helperText="@string/helper_default_keywords">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editKeywords"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="@string/hint_keywords"
+                            android:inputType="textMultiLine"
+                            android:minLines="4"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textColorHint="?attr/colorOnSurfaceVariant"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Nuolemo.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/field_plates">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editPlates"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="@string/hint_plates"
+                            android:inputType="textMultiLine|textCapCharacters"
+                            android:minLines="2"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Nuolemo.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/card_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
                     <TextView
-                        android:id="@+id/textAlarmSummary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/card_alarm_title"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/settings_helper_alarm"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Nuolemo.TextInput.ExposedDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/field_duration">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/inputAlarmDuration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textColor="?attr/colorOnSurface" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchVibrate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/switch_vibrate" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchMaximizeVolume"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="15sp"
-                        tools:text="报警时长 60 秒 · 震动 开 · 音量 拉满" />
+                        android:text="@string/switch_max_volume" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,12 +309,12 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonOpenSettings"
+                            android:id="@+id/buttonSaveAndClose"
                             style="@style/Widget.Nuolemo.Button"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/button_open_settings" />
+                            android:text="@string/button_save_and_close" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/buttonTestAlarm"
@@ -275,7 +344,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/card_guard_actions_title"
+                        android:text="@string/card_keepalive_title"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -284,39 +353,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_actions_summary"
+                        android:text="@string/card_keepalive_summary"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonRequestSms"
-                        style="@style/Widget.Nuolemo.Button.Tonal"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/button_request_sms" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonRequestNotifications"
-                        style="@style/Widget.Nuolemo.Button.Tonal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_request_notifications" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonFullScreenSettings"
-                        style="@style/Widget.Nuolemo.Button.Outlined"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_full_screen_settings" />
+                        android:layout_marginTop="14dp"
+                        android:background="@drawable/rounded_card"
+                        android:padding="14dp"
+                        android:text="@string/helper_keepalive"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonOpenAppSettings"
                         style="@style/Widget.Nuolemo.Button.Outlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         android:text="@string/button_open_app_settings" />
 
                     <com.google.android.material.button.MaterialButton

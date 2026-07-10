@@ -4,7 +4,6 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,104 +11,84 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.android.material.textfield.TextInputEditText
 
-class MainActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
+    private data class DurationOption(val seconds: Int, val label: String)
+
+    private val durationOptions by lazy {
+        listOf(
+            DurationOption(30, SettingsPresentation.durationLabel(this, 30)),
+            DurationOption(60, SettingsPresentation.durationLabel(this, 60)),
+            DurationOption(120, SettingsPresentation.durationLabel(this, 120)),
+            DurationOption(0, SettingsPresentation.durationLabel(this, 0)),
+        )
+    }
+
     private lateinit var rootView: View
-    private lateinit var switchGuardEnabled: SwitchMaterial
-    private lateinit var textGuardStateTitle: TextView
-    private lateinit var textGuardStateSummary: TextView
-    private lateinit var textRuleSummary: TextView
-    private lateinit var textAlarmSummary: TextView
-    private lateinit var chipEnabledStatus: Chip
+    private lateinit var editKeywords: TextInputEditText
+    private lateinit var editPlates: TextInputEditText
+    private lateinit var inputDuration: MaterialAutoCompleteTextView
+    private lateinit var switchVibrate: SwitchMaterial
+    private lateinit var switchMaximizeVolume: SwitchMaterial
     private lateinit var chipSmsPermission: Chip
     private lateinit var chipNotificationPermission: Chip
     private lateinit var chipFullScreenPermission: Chip
-    private lateinit var buttonOpenSettings: MaterialButton
-    private lateinit var buttonTestAlarm: MaterialButton
     private lateinit var buttonRequestSms: MaterialButton
     private lateinit var buttonRequestNotifications: MaterialButton
     private lateinit var buttonOpenFullScreenSettings: MaterialButton
     private lateinit var buttonOpenAppSettings: MaterialButton
     private lateinit var buttonOpenBatterySettings: MaterialButton
-
-    private var renderingState = false
+    private lateinit var buttonSaveAndClose: MaterialButton
+    private lateinit var buttonTestAlarm: MaterialButton
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            refreshUi()
-        }
-
-    private val settingsLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            refreshUi()
-            if (result.resultCode == RESULT_OK) {
-                Snackbar.make(rootView, R.string.settings_result_applied, Snackbar.LENGTH_SHORT).show()
-            }
+            updatePermissionStatus()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_settings)
 
         bindViews()
+        setupDurationMenu()
+        populateSettings(SettingsStore.load(this))
         bindActions()
-        maybeRequestEssentialPermissions()
-        refreshUi()
+        updatePermissionStatus()
     }
 
     override fun onResume() {
         super.onResume()
-        refreshUi()
+        updatePermissionStatus()
     }
 
     private fun bindViews() {
-        rootView = findViewById(R.id.rootContent)
-        switchGuardEnabled = findViewById(R.id.switchGuardEnabled)
-        textGuardStateTitle = findViewById(R.id.textGuardStateTitle)
-        textGuardStateSummary = findViewById(R.id.textGuardStateSummary)
-        textRuleSummary = findViewById(R.id.textRuleSummary)
-        textAlarmSummary = findViewById(R.id.textAlarmSummary)
-        chipEnabledStatus = findViewById(R.id.chipEnabledStatus)
+        rootView = findViewById(R.id.settingsRootContent)
+        editKeywords = findViewById(R.id.editKeywords)
+        editPlates = findViewById(R.id.editPlates)
+        inputDuration = findViewById(R.id.inputAlarmDuration)
+        switchVibrate = findViewById(R.id.switchVibrate)
+        switchMaximizeVolume = findViewById(R.id.switchMaximizeVolume)
         chipSmsPermission = findViewById(R.id.chipSmsPermission)
         chipNotificationPermission = findViewById(R.id.chipNotificationPermission)
         chipFullScreenPermission = findViewById(R.id.chipFullScreenPermission)
-        buttonOpenSettings = findViewById(R.id.buttonOpenSettings)
-        buttonTestAlarm = findViewById(R.id.buttonTestAlarm)
         buttonRequestSms = findViewById(R.id.buttonRequestSms)
         buttonRequestNotifications = findViewById(R.id.buttonRequestNotifications)
         buttonOpenFullScreenSettings = findViewById(R.id.buttonFullScreenSettings)
         buttonOpenAppSettings = findViewById(R.id.buttonOpenAppSettings)
         buttonOpenBatterySettings = findViewById(R.id.buttonOpenBatterySettings)
+        buttonSaveAndClose = findViewById(R.id.buttonSaveAndClose)
+        buttonTestAlarm = findViewById(R.id.buttonTestAlarm)
+    }
+
+    private fun setupDurationMenu() {
+        inputDuration.setSimpleItems(durationOptions.map { it.label }.toTypedArray())
+        inputDuration.keyListener = null
     }
 
     private fun bindActions() {
-        switchGuardEnabled.setOnCheckedChangeListener { _, isChecked ->
-            if (renderingState) {
-                return@setOnCheckedChangeListener
-            }
-
-            val currentSettings = SettingsStore.load(this)
-            SettingsStore.save(this, currentSettings.copy(enabled = isChecked))
-            refreshUi()
-            Snackbar.make(
-                rootView,
-                if (isChecked) {
-                    R.string.guard_enabled_toast
-                } else {
-                    R.string.guard_paused_toast
-                },
-                Snackbar.LENGTH_SHORT,
-            ).show()
-        }
-
-        buttonOpenSettings.setOnClickListener {
-            settingsLauncher.launch(android.content.Intent(this, SettingsActivity::class.java))
-        }
-
-        buttonTestAlarm.setOnClickListener {
-            triggerTestAlarm()
-        }
-
         buttonRequestSms.setOnClickListener {
             if (SystemSettingsNavigator.hasSmsPermission(this)) {
                 SystemSettingsNavigator.openAppDetailsSettings(this)
@@ -137,52 +116,52 @@ class MainActivity : AppCompatActivity() {
         buttonOpenBatterySettings.setOnClickListener {
             SystemSettingsNavigator.openBatteryOptimizationSettings(this)
         }
+
+        buttonSaveAndClose.setOnClickListener {
+            persistSettings()
+            setResult(RESULT_OK)
+            finish()
+        }
+
+        buttonTestAlarm.setOnClickListener {
+            persistSettings()
+            triggerTestAlarm()
+        }
     }
 
-    private fun refreshUi() {
-        val settings = SettingsStore.load(this)
-        renderGuardState(settings)
-        updatePermissionStatus()
+    private fun populateSettings(settings: AppSettings) {
+        editKeywords.setText(SettingsStore.formatEditorInput(settings.keywords))
+        editPlates.setText(SettingsStore.formatEditorInput(settings.plateNumbers))
+        inputDuration.setText(SettingsPresentation.durationLabel(this, settings.alarmDurationSeconds), false)
+        switchVibrate.isChecked = settings.vibrate
+        switchMaximizeVolume.isChecked = settings.maximizeVolume
     }
 
-    private fun renderGuardState(settings: AppSettings) {
-        renderingState = true
-        switchGuardEnabled.isChecked = settings.enabled
-        renderingState = false
-
-        textGuardStateTitle.text =
-            if (settings.enabled) {
-                getString(R.string.guard_state_on_title)
-            } else {
-                getString(R.string.guard_state_off_title)
-            }
-        textGuardStateSummary.text =
-            if (settings.enabled) {
-                getString(R.string.guard_state_on_summary)
-            } else {
-                getString(R.string.guard_state_off_summary)
-            }
-        textRuleSummary.text = SettingsPresentation.rulesOverview(this, settings)
-        textAlarmSummary.text = SettingsPresentation.alarmOverview(this, settings)
-
-        styleChip(
-            chip = chipEnabledStatus,
-            text =
-                if (settings.enabled) {
-                    getString(R.string.status_guard_active)
-                } else {
-                    getString(R.string.status_guard_paused)
-                },
-            tone = if (settings.enabled) Tone.GOOD else Tone.WARNING,
+    private fun collectSettings(): AppSettings {
+        val currentSettings = SettingsStore.load(this)
+        return currentSettings.copy(
+            keywords = SettingsStore.sanitizeKeywords(editKeywords.text?.toString().orEmpty()),
+            plateNumbers = SettingsStore.sanitizePlateNumbers(editPlates.text?.toString().orEmpty()),
+            alarmDurationSeconds = durationSecondsFor(inputDuration.text?.toString().orEmpty()),
+            vibrate = switchVibrate.isChecked,
+            maximizeVolume = switchMaximizeVolume.isChecked,
         )
     }
 
+    private fun persistSettings() {
+        SettingsStore.save(this, collectSettings())
+    }
+
     private fun updatePermissionStatus() {
-        val smsGranted = SystemSettingsNavigator.hasSmsPermission(this)
         styleChip(
             chip = chipSmsPermission,
-            text = if (smsGranted) getString(R.string.status_sms_granted) else getString(R.string.status_sms_missing),
-            tone = if (smsGranted) Tone.GOOD else Tone.DANGER,
+            text =
+                if (SystemSettingsNavigator.hasSmsPermission(this)) {
+                    getString(R.string.status_sms_granted)
+                } else {
+                    getString(R.string.status_sms_missing)
+                },
+            tone = if (SystemSettingsNavigator.hasSmsPermission(this)) Tone.GOOD else Tone.DANGER,
         )
 
         val notificationsEnabled = AlarmNotifier.areNotificationsEnabled(this)
@@ -210,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         buttonRequestSms.text =
-            if (smsGranted) {
+            if (SystemSettingsNavigator.hasSmsPermission(this)) {
                 getString(R.string.button_open_sms_settings)
             } else {
                 getString(R.string.button_request_sms)
@@ -231,22 +210,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 getString(R.string.button_notification_settings)
             }
-
-        buttonOpenSettings.text = getString(R.string.button_open_settings)
-    }
-
-    private fun maybeRequestEssentialPermissions() {
-        val missingPermissions = mutableListOf<String>()
-        if (!SystemSettingsNavigator.hasSmsPermission(this)) {
-            missingPermissions += Manifest.permission.RECEIVE_SMS
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !AlarmNotifier.areNotificationsEnabled(this)) {
-            missingPermissions += Manifest.permission.POST_NOTIFICATIONS
-        }
-
-        if (missingPermissions.isNotEmpty()) {
-            permissionLauncher.launch(missingPermissions.toTypedArray())
-        }
     }
 
     private fun triggerTestAlarm() {
@@ -264,6 +227,10 @@ class MainActivity : AppCompatActivity() {
             },
             Snackbar.LENGTH_SHORT,
         ).show()
+    }
+
+    private fun durationSecondsFor(label: String): Int {
+        return durationOptions.firstOrNull { it.label == label }?.seconds ?: 60
     }
 
     private fun styleChip(chip: Chip, text: String, tone: Tone) {

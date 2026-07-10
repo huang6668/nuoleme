@@ -32,6 +32,11 @@
         </activity>
 
         <activity
+            android:name=".SettingsActivity"
+            android:excludeFromRecents="true"
+            android:exported="false" />
+
+        <activity
             android:name=".AlarmActivity"
             android:excludeFromRecents="true"
             android:exported="false"

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
-import androidx.core.content.ContextCompat
 
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
@@ -32,19 +31,6 @@ class SmsReceiver : BroadcastReceiver() {
             return
         }
 
-        val serviceIntent =
-            Intent(context, AlarmService::class.java).apply {
-                action = AlarmService.ACTION_START
-                putExtra(AlarmService.EXTRA_SMS_BODY, body)
-                putExtra(AlarmService.EXTRA_SENDER, sender)
-            }
-
-        try {
-            ContextCompat.startForegroundService(context, serviceIntent)
-        } catch (_: IllegalStateException) {
-            AlarmNotifier.showUrgentAlarmNotification(context, sender, body)
-        } catch (_: SecurityException) {
-            AlarmNotifier.showUrgentAlarmNotification(context, sender, body)
-        }
+        AlarmLaunchHelper.startAlarm(context, sender, body)
     }
 }
