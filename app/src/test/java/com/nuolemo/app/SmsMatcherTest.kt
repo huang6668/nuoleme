@@ -111,7 +111,6 @@ class SmsMatcherTest {
             plateNumbers = plateNumbers,
             alarmDurationSeconds = 60,
             vibrate = true,
-            maximizeVolume = true,
         )
     }
 }
