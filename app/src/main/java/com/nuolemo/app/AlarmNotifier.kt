@@ -45,7 +45,7 @@ object AlarmNotifier {
             context = context,
             sender = sender,
             body = body,
-            enableFullScreenIntent = false,
+            enableFullScreenIntent = true,
             ongoing = true,
         ).build()
     }
@@ -117,7 +117,6 @@ object AlarmNotifier {
         val contentText = buildContentText(context, sender, body)
         val alarmIntent = createAlarmActivityIntent(context, sender, body)
         val alarmPendingIntent = createAlarmPendingIntent(context, alarmIntent)
-        val stopPendingIntent = AlarmStopReceiver.createPendingIntent(context)
 
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
@@ -130,7 +129,6 @@ object AlarmNotifier {
             .setOngoing(ongoing)
             .setAutoCancel(!ongoing)
             .setContentIntent(alarmPendingIntent)
-            .addAction(R.drawable.ic_notification, context.getString(R.string.stop_alarm), stopPendingIntent)
             .apply {
                 if (enableFullScreenIntent) {
                     setFullScreenIntent(alarmPendingIntent, true)

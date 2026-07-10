@@ -9,7 +9,6 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
 
 class AlarmActivity : AppCompatActivity() {
     private val handoffHandler = Handler(Looper.getMainLooper())
@@ -20,7 +19,7 @@ class AlarmActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var senderText: TextView
     private lateinit var bodyText: TextView
-    private lateinit var stopButton: MaterialButton
+    private lateinit var slideToStopView: SlideToStopView
 
     private val handoffRunnable =
         object : Runnable {
@@ -46,7 +45,7 @@ class AlarmActivity : AppCompatActivity() {
         statusText = findViewById(R.id.textAlarmStatus)
         senderText = findViewById(R.id.textAlarmSender)
         bodyText = findViewById(R.id.textAlarmBody)
-        stopButton = findViewById(R.id.buttonStopAlarm)
+        slideToStopView = findViewById(R.id.slideToStopAlarm)
 
         sender = intent.getStringExtra(AlarmService.EXTRA_SENDER)
         body =
@@ -57,7 +56,7 @@ class AlarmActivity : AppCompatActivity() {
         senderText.text = sender ?: getString(R.string.test_sender)
         bodyText.text = body
 
-        stopButton.setOnClickListener {
+        slideToStopView.setOnSlideCompleteListener {
             AlarmStopReceiver.stopAlarm(this)
             finish()
         }

@@ -74,15 +74,12 @@
                 android:lineSpacingExtra="4dp"
                 tools:text="您的车辆挡住了别人，请及时挪车。" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonStopAlarm"
-                style="@style/Widget.Nuolemo.Button"
+            <com.nuolemo.app.SlideToStopView
+                android:id="@+id/slideToStopAlarm"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="64dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="@color/alarm_button_bg"
-                android:text="@string/alarm_activity_stop"
-                android:textColor="@android:color/white" />
+                android:contentDescription="@string/alarm_activity_slide_to_stop" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

@@ -29,4 +29,5 @@
     <color name="alarm_text_secondary">#7F1D1D</color>
     <color name="alarm_highlight">#C2410C</color>
     <color name="alarm_button_bg">#B91C1C</color>
+    <color name="alarm_slide_track">#F7D9D5</color>
 </resources>
