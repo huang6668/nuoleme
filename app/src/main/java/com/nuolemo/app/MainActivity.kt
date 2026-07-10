@@ -266,20 +266,22 @@ class MainActivity : AppCompatActivity() {
     private fun triggerTestAlarm() {
         val sender = getString(R.string.test_sender)
         val body = getString(R.string.test_sms_body)
-        val intent =
+        val serviceIntent =
             Intent(this, AlarmService::class.java).apply {
                 action = AlarmService.ACTION_START
                 putExtra(AlarmService.EXTRA_SENDER, sender)
                 putExtra(AlarmService.EXTRA_SMS_BODY, body)
             }
+        val alarmPageIntent = AlarmNotifier.createAlarmActivityIntent(this, sender, body)
 
         runCatching {
-            ContextCompat.startForegroundService(this, intent)
+            ContextCompat.startForegroundService(this, serviceIntent)
         }.onSuccess {
+            startActivity(alarmPageIntent)
             Snackbar.make(rootView, R.string.test_alarm_started, Snackbar.LENGTH_SHORT).show()
         }.onFailure {
             AlarmNotifier.showUrgentAlarmNotification(this, sender, body)
-            startActivity(AlarmNotifier.createAlarmActivityIntent(this, sender, body))
+            startActivity(alarmPageIntent)
             Snackbar.make(rootView, R.string.test_alarm_fallback, Snackbar.LENGTH_SHORT).show()
         }
     }
