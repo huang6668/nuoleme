@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -27,6 +28,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private lateinit var rootView: View
+    private lateinit var textHealthSummary: TextView
     private lateinit var editKeywords: TextInputEditText
     private lateinit var editPlates: TextInputEditText
     private lateinit var inputDuration: MaterialAutoCompleteTextView
@@ -42,6 +44,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var buttonOpenBatterySettings: MaterialButton
     private lateinit var buttonSaveAndClose: MaterialButton
     private lateinit var buttonTestAlarm: MaterialButton
+    private lateinit var buttonBack: MaterialButton
+    private var settingsPopulated = false
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -55,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
         bindViews()
         setupDurationMenu()
         populateSettings(SettingsStore.load(this))
+        settingsPopulated = true
         bindActions()
         updatePermissionStatus()
     }
@@ -64,8 +69,16 @@ class SettingsActivity : AppCompatActivity() {
         updatePermissionStatus()
     }
 
+    override fun onPause() {
+        if (settingsPopulated) {
+            persistSettings()
+        }
+        super.onPause()
+    }
+
     private fun bindViews() {
         rootView = findViewById(R.id.settingsRootContent)
+        textHealthSummary = findViewById(R.id.textHealthSummary)
         editKeywords = findViewById(R.id.editKeywords)
         editPlates = findViewById(R.id.editPlates)
         inputDuration = findViewById(R.id.inputAlarmDuration)
@@ -81,6 +94,7 @@ class SettingsActivity : AppCompatActivity() {
         buttonOpenBatterySettings = findViewById(R.id.buttonOpenBatterySettings)
         buttonSaveAndClose = findViewById(R.id.buttonSaveAndClose)
         buttonTestAlarm = findViewById(R.id.buttonTestAlarm)
+        buttonBack = findViewById(R.id.buttonBack)
     }
 
     private fun setupDurationMenu() {
@@ -89,6 +103,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun bindActions() {
+        buttonBack.setOnClickListener { saveAndFinish() }
+
         buttonRequestSms.setOnClickListener {
             if (SystemSettingsNavigator.hasSmsPermission(this)) {
                 SystemSettingsNavigator.openAppDetailsSettings(this)
@@ -118,9 +134,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonSaveAndClose.setOnClickListener {
-            persistSettings()
-            setResult(RESULT_OK)
-            finish()
+            saveAndFinish()
         }
 
         buttonTestAlarm.setOnClickListener {
@@ -152,63 +166,62 @@ class SettingsActivity : AppCompatActivity() {
         SettingsStore.save(this, collectSettings())
     }
 
+    private fun saveAndFinish() {
+        persistSettings()
+        setResult(RESULT_OK)
+        finish()
+    }
+
     private fun updatePermissionStatus() {
+        val smsGranted = SystemSettingsNavigator.hasSmsPermission(this)
+        val notificationsEnabled = AlarmNotifier.areNotificationsEnabled(this)
+        val fullScreenAllowed = notificationsEnabled && AlarmNotifier.canUseFullScreenIntent(this)
+        val readyCount = listOf(smsGranted, notificationsEnabled, fullScreenAllowed).count { it }
+
+        textHealthSummary.text =
+            if (readyCount == TOTAL_HEALTH_CHECKS) {
+                getString(R.string.settings_health_all_ready)
+            } else {
+                getString(R.string.settings_health_summary, readyCount, TOTAL_HEALTH_CHECKS)
+            }
+
         styleChip(
             chip = chipSmsPermission,
-            text =
-                if (SystemSettingsNavigator.hasSmsPermission(this)) {
-                    getString(R.string.status_sms_granted)
-                } else {
-                    getString(R.string.status_sms_missing)
-                },
-            tone = if (SystemSettingsNavigator.hasSmsPermission(this)) Tone.GOOD else Tone.DANGER,
+            text = getString(if (smsGranted) R.string.status_ready_compact else R.string.status_action_compact),
+            tone = if (smsGranted) Tone.GOOD else Tone.DANGER,
         )
 
-        val notificationsEnabled = AlarmNotifier.areNotificationsEnabled(this)
         styleChip(
             chip = chipNotificationPermission,
-            text =
-                if (notificationsEnabled) {
-                    getString(R.string.status_notifications_granted)
-                } else {
-                    getString(R.string.status_notifications_missing)
-                },
-            tone = if (notificationsEnabled) Tone.GOOD else Tone.WARNING,
+            text = getString(if (notificationsEnabled) R.string.status_ready_compact else R.string.status_action_compact),
+            tone = if (notificationsEnabled) Tone.GOOD else Tone.DANGER,
         )
 
-        val fullScreenAllowed = AlarmNotifier.canUseFullScreenIntent(this)
         styleChip(
             chip = chipFullScreenPermission,
-            text =
-                if (fullScreenAllowed) {
-                    getString(R.string.status_full_screen_ready)
-                } else {
-                    getString(R.string.status_full_screen_missing)
-                },
+            text = getString(if (fullScreenAllowed) R.string.status_ready_compact else R.string.status_recommended_compact),
             tone = if (fullScreenAllowed) Tone.GOOD else Tone.WARNING,
         )
 
         buttonRequestSms.text =
-            if (SystemSettingsNavigator.hasSmsPermission(this)) {
-                getString(R.string.button_open_sms_settings)
+            if (smsGranted) {
+                getString(R.string.button_manage)
             } else {
-                getString(R.string.button_request_sms)
+                getString(R.string.button_allow)
             }
 
-        buttonRequestNotifications.visibility =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) View.VISIBLE else View.GONE
         buttonRequestNotifications.text =
             if (notificationsEnabled) {
-                getString(R.string.button_notification_settings)
+                getString(R.string.button_manage)
             } else {
-                getString(R.string.button_request_notifications)
+                getString(R.string.button_allow)
             }
 
         buttonOpenFullScreenSettings.text =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                getString(R.string.button_full_screen_settings)
+            if (fullScreenAllowed) {
+                getString(R.string.button_manage)
             } else {
-                getString(R.string.button_notification_settings)
+                getString(R.string.button_go_set)
             }
     }
 
@@ -245,5 +258,9 @@ class SettingsActivity : AppCompatActivity() {
         GOOD(R.color.status_good_bg, R.color.status_good_fg),
         WARNING(R.color.status_warning_bg, R.color.status_warning_fg),
         DANGER(R.color.status_danger_bg, R.color.status_danger_fg),
+    }
+
+    companion object {
+        private const val TOTAL_HEALTH_CHECKS = 3
     }
 }

@@ -5,159 +5,166 @@
     android:id="@+id/rootContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_background"
     tools:context=".MainActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:fillViewport="true"
         android:paddingStart="20dp"
-        android:paddingTop="24dp"
+        android:paddingTop="18dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="32dp">
+        android:paddingBottom="28dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Nuolemo.Card"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_header_gradient"
-                    android:padding="24dp">
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_icon_tile"
+                    android:padding="11dp">
 
                     <ImageView
-                        android:id="@+id/imageHeroIcon"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:contentDescription="@string/app_name"
                         android:src="@drawable/ic_car"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/brand_primary" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textAppName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/app_name"
-                        android:textColor="@android:color/white"
-                        android:textSize="32sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/imageHeroIcon" />
-
-                    <TextView
-                        android:id="@+id/textSubtitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/app_subtitle"
-                        android:textColor="@android:color/white"
-                        android:textSize="15sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textAppName" />
-
-                    <TextView
-                        android:id="@+id/textHeaderBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/rounded_card"
-                        android:paddingStart="12dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="6dp"
-                        android:text="@string/header_badge"
-                        android:textColor="@color/brand_primary"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textSubtitle" />
+                        android:text="@string/app_name"
+                        android:textColor="@color/text_primary"
+                        android:textSize="21sp"
+                        android:textStyle="bold" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:maxLines="1"
+                        android:text="@string/app_subtitle"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonOpenSettings"
+                    style="@style/Widget.Nuolemo.Button.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_settings" />
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGuardStatus"
                 style="@style/Widget.Nuolemo.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:cardBackgroundColor="@color/card_surface">
+                android:layout_marginTop="22dp"
+                app:cardBackgroundColor="@color/hero_ready">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="22dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/card_guard_title"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_summary"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switchGuardEnabled"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="@string/home_toggle_label"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_status_orb"
+                            android:padding="9dp">
+
+                            <ImageView
+                                android:id="@+id/imageGuardStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:contentDescription="@string/card_guard_title"
+                                android:src="@drawable/ic_shield_check" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textGuardStateKicker"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="@string/home_status_ready_kicker"
+                            android:textAllCaps="true"
+                            android:textColor="@color/hero_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchGuardEnabled"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/home_toggle_label" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textGuardStateTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="24sp"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@color/hero_text_primary"
+                        android:textSize="30sp"
                         android:textStyle="bold"
-                        tools:text="后台守护已开启" />
+                        tools:text="可以安心退出" />
 
                     <TextView
                         android:id="@+id/textGuardStateSummary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:lineSpacingExtra="3dp"
+                        android:textColor="@color/hero_text_secondary"
                         android:textSize="15sp"
-                        tools:text="现在可以直接返回桌面。收到命中短信时，系统会唤醒挪了么并拉起报警流程。" />
+                        tools:text="关闭界面后，系统收到命中短信仍会唤醒挪了么并立即报警。" />
+
+                    <TextView
+                        android:id="@+id/textReadinessSummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@color/hero_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="3 项关键能力全部就绪" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:chipSpacingHorizontal="8dp"
-                        app:chipSpacingVertical="8dp"
+                        android:layout_marginTop="8dp"
+                        app:chipSpacingHorizontal="6dp"
+                        app:chipSpacingVertical="6dp"
                         app:singleLine="false">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipEnabledStatus"
-                            style="@style/Widget.Nuolemo.StatusChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="false"
-                            tools:text="后台守护已开启" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipSmsPermission"
@@ -165,7 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="false"
-                            tools:text="短信权限已授权" />
+                            tools:text="短信接收 ✓" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipNotificationPermission"
@@ -173,7 +180,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="false"
-                            tools:text="通知权限已授权" />
+                            tools:text="报警通知 ✓" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipFullScreenPermission"
@@ -181,16 +188,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="false"
-                            tools:text="全屏提醒可用" />
+                            tools:text="锁屏唤醒 ✓" />
                     </com.google.android.material.chip.ChipGroup>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonPrimaryAction"
+                        style="@style/Widget.Nuolemo.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:backgroundTint="@android:color/white"
+                        android:text="@string/button_exit_keep_guard"
+                        android:textColor="@color/hero_ready" />
+
+                    <TextView
+                        android:id="@+id/textCloseNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/home_close_note"
+                        android:textColor="@color/hero_text_secondary"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Nuolemo.Card"
+                style="@style/Widget.Nuolemo.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/card_surface">
 
                 <LinearLayout
@@ -202,54 +229,73 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/card_guard_rules_title"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="20sp"
+                        android:text="@string/home_plan_label"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_rules_summary"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
+                        android:layout_marginTop="12dp"
+                        android:text="@string/home_rule_label"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textRuleSummary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
                         tools:text="关键词 8 条，车牌 2 个" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/outline_soft" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/home_alarm_label"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textAlarmSummary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="15sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
                         tools:text="报警时长 60 秒 · 震动 开 · 音量 拉满" />
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonOpenSettings"
-                            style="@style/Widget.Nuolemo.Button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/button_open_settings" />
-                    </LinearLayout>
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/rounded_card"
+                        android:padding="14dp"
+                        android:text="@string/home_plan_hint"
+                        android:textColor="@color/text_primary"
+                        android:textSize="13sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:text="@string/home_privacy_note"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </FrameLayout>
