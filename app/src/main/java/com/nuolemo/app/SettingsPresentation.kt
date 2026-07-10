@@ -35,18 +35,12 @@ object SettingsPresentation {
             } else {
                 context.getString(R.string.summary_option_off)
             }
-        val volume =
-            if (settings.maximizeVolume) {
-                context.getString(R.string.summary_volume_max)
-            } else {
-                context.getString(R.string.summary_volume_keep)
-            }
 
         return context.getString(
             R.string.home_alarm_overview,
             durationLabel(context, settings.alarmDurationSeconds),
             vibration,
-            volume,
+            context.getString(R.string.summary_alarm_sound_system),
         )
     }
 }

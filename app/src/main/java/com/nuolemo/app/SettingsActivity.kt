@@ -5,9 +5,13 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -28,12 +32,13 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private lateinit var rootView: View
+    private lateinit var scrollView: View
+    private lateinit var bottomActionBar: View
     private lateinit var textHealthSummary: TextView
     private lateinit var editKeywords: TextInputEditText
     private lateinit var editPlates: TextInputEditText
     private lateinit var inputDuration: MaterialAutoCompleteTextView
     private lateinit var switchVibrate: SwitchMaterial
-    private lateinit var switchMaximizeVolume: SwitchMaterial
     private lateinit var chipSmsPermission: Chip
     private lateinit var chipNotificationPermission: Chip
     private lateinit var chipFullScreenPermission: Chip
@@ -53,10 +58,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         bindViews()
+        applySystemBarInsets()
         setupDurationMenu()
         populateSettings(SettingsStore.load(this))
         settingsPopulated = true
@@ -78,12 +85,13 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun bindViews() {
         rootView = findViewById(R.id.settingsRootContent)
+        scrollView = findViewById(R.id.settingsScrollView)
+        bottomActionBar = findViewById(R.id.bottomActionBar)
         textHealthSummary = findViewById(R.id.textHealthSummary)
         editKeywords = findViewById(R.id.editKeywords)
         editPlates = findViewById(R.id.editPlates)
         inputDuration = findViewById(R.id.inputAlarmDuration)
         switchVibrate = findViewById(R.id.switchVibrate)
-        switchMaximizeVolume = findViewById(R.id.switchMaximizeVolume)
         chipSmsPermission = findViewById(R.id.chipSmsPermission)
         chipNotificationPermission = findViewById(R.id.chipNotificationPermission)
         chipFullScreenPermission = findViewById(R.id.chipFullScreenPermission)
@@ -95,6 +103,35 @@ class SettingsActivity : AppCompatActivity() {
         buttonSaveAndClose = findViewById(R.id.buttonSaveAndClose)
         buttonTestAlarm = findViewById(R.id.buttonTestAlarm)
         buttonBack = findViewById(R.id.buttonBack)
+    }
+
+    private fun applySystemBarInsets() {
+        val scrollBaseStart = scrollView.paddingStart
+        val scrollBaseTop = scrollView.paddingTop
+        val scrollBaseEnd = scrollView.paddingEnd
+        val scrollBaseBottom = scrollView.paddingBottom
+        val barBaseStart = bottomActionBar.paddingStart
+        val barBaseTop = bottomActionBar.paddingTop
+        val barBaseEnd = bottomActionBar.paddingEnd
+        val barBaseBottom = bottomActionBar.paddingBottom
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            scrollView.updatePaddingRelative(
+                start = scrollBaseStart + systemBars.left,
+                top = scrollBaseTop + systemBars.top,
+                end = scrollBaseEnd + systemBars.right,
+                bottom = scrollBaseBottom + systemBars.bottom,
+            )
+            bottomActionBar.updatePaddingRelative(
+                start = barBaseStart + systemBars.left,
+                top = barBaseTop,
+                end = barBaseEnd + systemBars.right,
+                bottom = barBaseBottom + systemBars.bottom,
+            )
+            insets
+        }
+        ViewCompat.requestApplyInsets(rootView)
     }
 
     private fun setupDurationMenu() {
@@ -148,7 +185,6 @@ class SettingsActivity : AppCompatActivity() {
         editPlates.setText(SettingsStore.formatEditorInput(settings.plateNumbers))
         inputDuration.setText(SettingsPresentation.durationLabel(this, settings.alarmDurationSeconds), false)
         switchVibrate.isChecked = settings.vibrate
-        switchMaximizeVolume.isChecked = settings.maximizeVolume
     }
 
     private fun collectSettings(): AppSettings {
@@ -158,7 +194,6 @@ class SettingsActivity : AppCompatActivity() {
             plateNumbers = SettingsStore.sanitizePlateNumbers(editPlates.text?.toString().orEmpty()),
             alarmDurationSeconds = durationSecondsFor(inputDuration.text?.toString().orEmpty()),
             vibrate = switchVibrate.isChecked,
-            maximizeVolume = switchMaximizeVolume.isChecked,
         )
     }
 

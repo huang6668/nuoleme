@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -16,6 +20,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rootView: View
+    private lateinit var scrollView: View
     private lateinit var cardGuardStatus: MaterialCardView
     private lateinit var imageGuardStatus: ImageView
     private lateinit var switchGuardEnabled: SwitchMaterial
@@ -44,10 +49,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         bindViews()
+        applySystemBarInsets()
         bindActions()
         refreshUi()
     }
@@ -59,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindViews() {
         rootView = findViewById(R.id.rootContent)
+        scrollView = findViewById(R.id.mainScrollView)
         cardGuardStatus = findViewById(R.id.cardGuardStatus)
         imageGuardStatus = findViewById(R.id.imageGuardStatus)
         switchGuardEnabled = findViewById(R.id.switchGuardEnabled)
@@ -74,6 +82,25 @@ class MainActivity : AppCompatActivity() {
         chipFullScreenPermission = findViewById(R.id.chipFullScreenPermission)
         buttonPrimaryAction = findViewById(R.id.buttonPrimaryAction)
         buttonOpenSettings = findViewById(R.id.buttonOpenSettings)
+    }
+
+    private fun applySystemBarInsets() {
+        val baseStart = scrollView.paddingStart
+        val baseTop = scrollView.paddingTop
+        val baseEnd = scrollView.paddingEnd
+        val baseBottom = scrollView.paddingBottom
+
+        ViewCompat.setOnApplyWindowInsetsListener(scrollView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePaddingRelative(
+                start = baseStart + systemBars.left,
+                top = baseTop + systemBars.top,
+                end = baseEnd + systemBars.right,
+                bottom = baseBottom + systemBars.bottom,
+            )
+            insets
+        }
+        ViewCompat.requestApplyInsets(scrollView)
     }
 
     private fun bindActions() {

@@ -2,7 +2,6 @@ package com.nuolemo.app
 
 import android.content.Context
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
@@ -37,8 +36,6 @@ object AlarmPlaybackController {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private var audioManager: AudioManager? = null
-    private var originalMediaVolume: Int? = null
     private var timeoutRunnable: Runnable? = null
     private var onStoppedListener: (() -> Unit)? = null
 
@@ -72,11 +69,6 @@ object AlarmPlaybackController {
             previousListener = stopLocked(notifyListener = currentOwner != null && currentOwner != owner)
             currentOwner = owner
             onStoppedListener = onStopped
-            audioManager = appContext.getSystemService(AudioManager::class.java)
-
-            if (settings.maximizeVolume) {
-                maximizeMediaVolumeLocked()
-            }
 
             mediaPlayer = createAlarmPlayer(appContext).apply {
                 this?.start()
@@ -128,7 +120,6 @@ object AlarmPlaybackController {
         mediaPlayer = null
 
         cancelVibrationLocked()
-        restoreMediaVolumeLocked()
 
         currentOwner = null
         lastSender = null
@@ -144,26 +135,6 @@ object AlarmPlaybackController {
         val effectiveSeconds = if (durationSeconds > 0) durationSeconds else SAFETY_MAX_DURATION_SECONDS
         timeoutRunnable = Runnable { stop() }
         mainHandler.postDelayed(timeoutRunnable!!, effectiveSeconds * 1_000L)
-    }
-
-    private fun maximizeMediaVolumeLocked() {
-        val manager = audioManager ?: return
-        if (originalMediaVolume == null) {
-            originalMediaVolume = manager.getStreamVolume(AudioManager.STREAM_MUSIC)
-        }
-        val maxVolume = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        manager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0)
-    }
-
-    private fun restoreMediaVolumeLocked() {
-        val manager = audioManager
-        val savedVolume = originalMediaVolume
-        if (manager != null && savedVolume != null) {
-            val maxVolume = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            manager.setStreamVolume(AudioManager.STREAM_MUSIC, savedVolume.coerceIn(0, maxVolume), 0)
-        }
-        originalMediaVolume = null
-        audioManager = null
     }
 
     private fun createAlarmPlayer(context: Context): MediaPlayer? {

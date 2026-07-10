@@ -12,7 +12,6 @@
     <string name="hint_plates">例如 鄂A12345、沪B·12345</string>
     <string name="helper_default_keywords">默认严格关键词会一直生效，这里用于补充你的自定义命中词。</string>
     <string name="switch_vibrate">报警时震动</string>
-    <string name="switch_max_volume">报警时拉满媒体音量</string>
     <string name="home_toggle_label">挪车短信守护</string>
     <string name="button_open_app_settings">应用详情设置</string>
     <string name="button_open_battery_settings">电池优化设置</string>
@@ -29,11 +28,10 @@
     <string name="duration_manual">手动停止（最多 5 分钟）</string>
     <string name="home_rules_overview">关键词 %1$d 条，车牌 %2$d 个</string>
     <string name="home_rules_overview_no_plate">关键词 %1$d 条，暂未配置车牌</string>
-    <string name="home_alarm_overview">报警时长 %1$s · 震动 %2$s · 音量 %3$s</string>
+    <string name="home_alarm_overview">报警时长 %1$s · 震动 %2$s · 声音 %3$s</string>
     <string name="summary_option_on">开</string>
     <string name="summary_option_off">关</string>
-    <string name="summary_volume_max">拉满</string>
-    <string name="summary_volume_keep">保持原样</string>
+    <string name="summary_alarm_sound_system">系统闹铃</string>
     <string name="notification_title">收到挪车短信</string>
     <string name="stop_alarm">停止响铃</string>
     <string name="alarm_channel_name">挪车提醒</string>
@@ -100,7 +98,8 @@
     <string name="settings_rules_title">什么短信需要叫醒你</string>
     <string name="settings_rules_summary">默认关键词已经可用；添加车牌能进一步减少漏报。</string>
     <string name="settings_alarm_title">叫醒你的方式</string>
-    <string name="settings_alarm_summary">建议保留震动和拉满媒体音量，并至少测试一次。</string>
+    <string name="settings_alarm_summary">建议保留震动，并至少测试一次系统当前闹铃响度。</string>
+    <string name="settings_alarm_volume_note">报警会优先使用系统默认闹铃铃声，并跟随系统当前闹铃音量；不会自动修改你的媒体音量。</string>
     <string name="settings_system_title">厂商后台策略</string>
     <string name="settings_system_summary">这一步无法由 App 代替你完成，换手机或系统升级后建议重新确认。</string>
     <string name="settings_done_note">离开时自动保存</string>
