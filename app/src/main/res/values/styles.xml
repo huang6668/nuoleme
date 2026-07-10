@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Nuolemo.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">28dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.StatusChip" parent="Widget.Material3.Chip.Assist">
+        <item name="android:textStyle">bold</item>
+        <item name="chipMinHeight">36dp</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">18dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.TextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.TextInput.ExposedDropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">52dp</item>
+        <item name="cornerRadius">18dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.Button.Tonal" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:minHeight">52dp</item>
+        <item name="cornerRadius">18dp</item>
+    </style>
+
+    <style name="Widget.Nuolemo.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">52dp</item>
+        <item name="cornerRadius">18dp</item>
+    </style>
+</resources>

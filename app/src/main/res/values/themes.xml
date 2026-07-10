@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Nuolemo" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSurface">@color/card_surface</item>
+        <item name="android:windowBackground">@color/screen_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/screen_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="materialCardViewStyle">@style/Widget.Nuolemo.Card</item>
+        <item name="chipStyle">@style/Widget.Nuolemo.StatusChip</item>
+    </style>
+
+    <style name="Theme.Nuolemo.Alarm" parent="Theme.Nuolemo">
+        <item name="android:windowBackground">@drawable/bg_alarm_surface</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

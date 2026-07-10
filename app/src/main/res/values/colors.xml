@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_primary">#2563EB</color>
+    <color name="brand_secondary">#14B8A6</color>
+    <color name="screen_background">#F6F8FB</color>
+    <color name="card_surface">#FFFFFFFF</color>
+    <color name="status_good_bg">#DCFCE7</color>
+    <color name="status_good_fg">#166534</color>
+    <color name="status_warning_bg">#FEF3C7</color>
+    <color name="status_warning_fg">#92400E</color>
+    <color name="status_danger_bg">#FEE2E2</color>
+    <color name="status_danger_fg">#B91C1C</color>
+    <color name="alarm_gradient_start">#3D0219</color>
+    <color name="alarm_gradient_center">#7F1D1D</color>
+    <color name="alarm_gradient_end">#D9485F</color>
+    <color name="alarm_card_surface">#FFF6F3</color>
+    <color name="alarm_text_primary">#2B1116</color>
+    <color name="alarm_text_secondary">#7F1D1D</color>
+    <color name="alarm_highlight">#C2410C</color>
+    <color name="alarm_button_bg">#B91C1C</color>
+</resources>
