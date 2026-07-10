@@ -237,95 +237,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/buttonOpenSettings"
                             style="@style/Widget.Nuolemo.Button"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text="@string/button_open_settings" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonTestAlarm"
-                            style="@style/Widget.Nuolemo.Button.Tonal"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:text="@string/button_test_alarm" />
                     </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Nuolemo.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:cardBackgroundColor="@color/card_surface">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/card_guard_actions_title"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/card_guard_actions_summary"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonRequestSms"
-                        style="@style/Widget.Nuolemo.Button.Tonal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/button_request_sms" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonRequestNotifications"
-                        style="@style/Widget.Nuolemo.Button.Tonal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_request_notifications" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonFullScreenSettings"
-                        style="@style/Widget.Nuolemo.Button.Outlined"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_full_screen_settings" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonOpenAppSettings"
-                        style="@style/Widget.Nuolemo.Button.Outlined"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_open_app_settings" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonOpenBatterySettings"
-                        style="@style/Widget.Nuolemo.Button.Outlined"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/button_open_battery_settings" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

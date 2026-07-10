@@ -25,12 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chipNotificationPermission: Chip
     private lateinit var chipFullScreenPermission: Chip
     private lateinit var buttonOpenSettings: MaterialButton
-    private lateinit var buttonTestAlarm: MaterialButton
-    private lateinit var buttonRequestSms: MaterialButton
-    private lateinit var buttonRequestNotifications: MaterialButton
-    private lateinit var buttonOpenFullScreenSettings: MaterialButton
-    private lateinit var buttonOpenAppSettings: MaterialButton
-    private lateinit var buttonOpenBatterySettings: MaterialButton
 
     private var renderingState = false
 
@@ -74,12 +68,6 @@ class MainActivity : AppCompatActivity() {
         chipNotificationPermission = findViewById(R.id.chipNotificationPermission)
         chipFullScreenPermission = findViewById(R.id.chipFullScreenPermission)
         buttonOpenSettings = findViewById(R.id.buttonOpenSettings)
-        buttonTestAlarm = findViewById(R.id.buttonTestAlarm)
-        buttonRequestSms = findViewById(R.id.buttonRequestSms)
-        buttonRequestNotifications = findViewById(R.id.buttonRequestNotifications)
-        buttonOpenFullScreenSettings = findViewById(R.id.buttonFullScreenSettings)
-        buttonOpenAppSettings = findViewById(R.id.buttonOpenAppSettings)
-        buttonOpenBatterySettings = findViewById(R.id.buttonOpenBatterySettings)
     }
 
     private fun bindActions() {
@@ -104,38 +92,6 @@ class MainActivity : AppCompatActivity() {
 
         buttonOpenSettings.setOnClickListener {
             settingsLauncher.launch(android.content.Intent(this, SettingsActivity::class.java))
-        }
-
-        buttonTestAlarm.setOnClickListener {
-            triggerTestAlarm()
-        }
-
-        buttonRequestSms.setOnClickListener {
-            if (SystemSettingsNavigator.hasSmsPermission(this)) {
-                SystemSettingsNavigator.openAppDetailsSettings(this)
-            } else {
-                permissionLauncher.launch(arrayOf(Manifest.permission.RECEIVE_SMS))
-            }
-        }
-
-        buttonRequestNotifications.setOnClickListener {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || AlarmNotifier.areNotificationsEnabled(this)) {
-                SystemSettingsNavigator.openNotificationSettings(this)
-            } else {
-                permissionLauncher.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
-            }
-        }
-
-        buttonOpenFullScreenSettings.setOnClickListener {
-            SystemSettingsNavigator.openFullScreenIntentSettings(this)
-        }
-
-        buttonOpenAppSettings.setOnClickListener {
-            SystemSettingsNavigator.openAppDetailsSettings(this)
-        }
-
-        buttonOpenBatterySettings.setOnClickListener {
-            SystemSettingsNavigator.openBatteryOptimizationSettings(this)
         }
     }
 
@@ -209,29 +165,6 @@ class MainActivity : AppCompatActivity() {
             tone = if (fullScreenAllowed) Tone.GOOD else Tone.WARNING,
         )
 
-        buttonRequestSms.text =
-            if (smsGranted) {
-                getString(R.string.button_open_sms_settings)
-            } else {
-                getString(R.string.button_request_sms)
-            }
-
-        buttonRequestNotifications.visibility =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) View.VISIBLE else View.GONE
-        buttonRequestNotifications.text =
-            if (notificationsEnabled) {
-                getString(R.string.button_notification_settings)
-            } else {
-                getString(R.string.button_request_notifications)
-            }
-
-        buttonOpenFullScreenSettings.text =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                getString(R.string.button_full_screen_settings)
-            } else {
-                getString(R.string.button_notification_settings)
-            }
-
         buttonOpenSettings.text = getString(R.string.button_open_settings)
     }
 
@@ -247,23 +180,6 @@ class MainActivity : AppCompatActivity() {
         if (missingPermissions.isNotEmpty()) {
             permissionLauncher.launch(missingPermissions.toTypedArray())
         }
-    }
-
-    private fun triggerTestAlarm() {
-        val sender = getString(R.string.test_sender)
-        val body = getString(R.string.test_sms_body)
-        val launchResult = AlarmLaunchHelper.startAlarm(this, sender, body)
-
-        startActivity(AlarmNotifier.createAlarmActivityIntent(this, sender, body))
-        Snackbar.make(
-            rootView,
-            if (launchResult == AlarmLaunchResult.FOREGROUND_SERVICE_STARTED) {
-                R.string.test_alarm_started
-            } else {
-                R.string.test_alarm_fallback
-            },
-            Snackbar.LENGTH_SHORT,
-        ).show()
     }
 
     private fun styleChip(chip: Chip, text: String, tone: Tone) {

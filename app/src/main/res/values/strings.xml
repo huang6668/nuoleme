@@ -9,7 +9,7 @@
     <string name="card_guard_title">后台守护</string>
     <string name="card_guard_summary">打开后可以直接返回桌面。挪了么会通过系统短信广播在后台待命，而不是常驻轮询。</string>
     <string name="card_guard_rules_title">当前规则摘要</string>
-    <string name="card_guard_rules_summary">配置单独放在设置页里，改完保存后会立即生效并自动退出设置页。</string>
+    <string name="card_guard_rules_summary">首页只展示当前规则摘要；权限、测试报警和保活入口都集中在设置页里。</string>
     <string name="card_guard_actions_title">权限与保活</string>
     <string name="card_guard_actions_summary">把短信、通知、自启动和电池策略准备好，后台命中成功率会更高。</string>
     <string name="card_status_title">系统状态</string>
