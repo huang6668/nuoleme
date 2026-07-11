@@ -2,6 +2,11 @@
 
 [![Android Build](https://github.com/huang6668/nuoleme/actions/workflows/android-build.yml/badge.svg)](https://github.com/huang6668/nuoleme/actions/workflows/android-build.yml)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/huang6668/nuoleme/main/docs/assets/hero_screenshot.webp" alt="挪了么 首页" width="300" style="margin-right: 20px"/>
+  <img src="https://raw.githubusercontent.com/huang6668/nuoleme/main/docs/assets/alarm_screenshot.webp" alt="挪了么 报警页" width="300"/>
+</p>
+
 挪了么是一个离线、轻量、零常驻的 Android 挪车短信提醒 App。它的目标很直接：当你收到“挪车 / 移车 / 车牌命中”的短信时，不是只给你一个容易错过的普通通知，而是尽量像系统闹铃一样把你叫出来。
 
 ## 这个项目解决什么问题
