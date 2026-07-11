@@ -120,13 +120,9 @@ class MainActivity : AppCompatActivity() {
         buttonOpenSettings.setOnClickListener { openSettings() }
         buttonPrimaryAction.setOnClickListener {
             when (primaryAction) {
-                PrimaryAction.RESUME_GUARD -> {
-                    setGuardEnabled(true)
-                    Snackbar.make(rootView, R.string.guard_enabled_toast, Snackbar.LENGTH_SHORT).show()
-                }
-
                 PrimaryAction.OPEN_SETTINGS -> openSettings()
-                PrimaryAction.EXIT_AND_KEEP_GUARD -> finishAndRemoveTask()
+                PrimaryAction.EXIT_AND_KEEP_GUARD -> finish()
+                PrimaryAction.RESUME_GUARD -> switchGuardEnabled.isChecked = true
             }
         }
     }

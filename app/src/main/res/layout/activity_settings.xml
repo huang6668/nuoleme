@@ -59,7 +59,7 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/settings_subtitle"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/settings_health_kicker"
                         android:textColor="@color/brand_primary"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -488,7 +488,7 @@
             android:layout_weight="1"
             android:text="@string/settings_done_note"
             android:textColor="@color/text_secondary"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSaveAndClose"
