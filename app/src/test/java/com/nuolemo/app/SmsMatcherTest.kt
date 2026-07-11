@@ -30,6 +30,18 @@ class SmsMatcherTest {
     }
 
     @Test
+    fun `matches hubei traffic police real sms`() {
+        val matched =
+            SmsMatcher.matches(
+                settings = sampleSettings(plateNumbers = listOf("鄂W8608J")),
+                sender = "湖北交警",
+                body = "【湖北交警】您的小型汽车鄂W8608J于2026年7月9日7时19分在流芳路高新四路至高新六路未按规定停放已被记录，请立即驶离，未及时驶离的，将依法予以处罚。",
+            )
+
+        assertTrue(matched)
+    }
+
+    @Test
     fun `does not match verification code text`() {
         val matched =
             SmsMatcher.matches(
