@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         buttonPrimaryAction.setOnClickListener {
             when (primaryAction) {
                 PrimaryAction.OPEN_SETTINGS -> openSettings()
-                PrimaryAction.EXIT_AND_KEEP_GUARD -> finishAndRemoveTask()
+                PrimaryAction.EXIT_AND_KEEP_GUARD -> moveTaskToBack(true)
                 PrimaryAction.RESUME_GUARD -> switchGuardEnabled.isChecked = true
             }
         }
