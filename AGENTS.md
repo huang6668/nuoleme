@@ -45,6 +45,7 @@
 
 ## 提交与工作区规则
 
+- 每次向主分支或发布分支推送功能更新时，必须递增 `app/build.gradle.kts` 中的 `versionCode` 和 `versionName`，以便于用户通过 GitHub Actions 产出的 APK 进行覆盖安装测试。
 - 工作区可能有用户未提交的改动，不能擅自回退。
 - 提交或推送前，先确认只包含当前任务需要的文件。
 - 如果仓库中有历史兼容文件（如 `CLAUDE.md`），可以维护，但 Codex 应优先遵循 `AGENTS.md`。
