@@ -20,6 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare stable debug signing key
+        run: base64 --decode .github/signing/nuolemo-debug.keystore.b64 > "$RUNNER_TEMP/nuolemo-debug.keystore"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -40,6 +43,8 @@ jobs:
 
       - name: Run unit tests and build debug APK
         run: ./gradlew test :app:assembleDebug
+        env:
+          NUOLEMO_DEBUG_KEYSTORE: ${{ runner.temp }}/nuolemo-debug.keystore
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

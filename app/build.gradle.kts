@@ -11,13 +11,25 @@ android {
         applicationId = "com.nuolemo.app"
         minSdk = 23
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 6
+        versionName = "1.0.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
+    signingConfigs {
+        getByName("debug") {
+            providers.environmentVariable("NUOLEMO_DEBUG_KEYSTORE").orNull?.let { keystorePath ->
+                storeFile = file(keystorePath)
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
+    }
+
     buildTypes {
-release {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
