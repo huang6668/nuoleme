@@ -115,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
         val barBaseEnd = bottomActionBar.paddingEnd
         val barBaseBottom = bottomActionBar.paddingBottom
 
-        bottomActionBar.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _, _ ->
+        bottomActionBar.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
             val requiredBottomPadding = scrollBaseBottom + view.height
             if (scrollView.paddingBottom != requiredBottomPadding) {
                 scrollView.updatePaddingRelative(bottom = requiredBottomPadding)
