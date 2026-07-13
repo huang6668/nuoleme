@@ -115,13 +115,19 @@ class SettingsActivity : AppCompatActivity() {
         val barBaseEnd = bottomActionBar.paddingEnd
         val barBaseBottom = bottomActionBar.paddingBottom
 
+        bottomActionBar.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _, _ ->
+            val requiredBottomPadding = scrollBaseBottom + view.height
+            if (scrollView.paddingBottom != requiredBottomPadding) {
+                scrollView.updatePaddingRelative(bottom = requiredBottomPadding)
+            }
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             scrollView.updatePaddingRelative(
                 start = scrollBaseStart + systemBars.left,
                 top = scrollBaseTop + systemBars.top,
                 end = scrollBaseEnd + systemBars.right,
-                bottom = scrollBaseBottom + systemBars.bottom,
             )
             bottomActionBar.updatePaddingRelative(
                 start = barBaseStart + systemBars.left,
