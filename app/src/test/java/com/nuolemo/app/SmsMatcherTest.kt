@@ -78,7 +78,7 @@ class SmsMatcherTest {
     }
 
     @Test
-    fun `matches trusted sender marker with strict default keyword`() {
+    fun `empty custom keywords still uses strict defaults`() {
         val matched =
             SmsMatcher.matches(
                 settings = sampleSettings(keywords = emptyList()),
@@ -107,14 +107,26 @@ class SmsMatcherTest {
             SmsMatcher.matches(
                 settings = sampleSettings(keywords = emptyList(), plateNumbers = listOf("沪B-88888")),
                 sender = null,
-                body = "沪 B88888 请及时移车，谢谢。",
+                body = "车辆沪 B88888，请尽快处理。",
             )
 
         assertTrue(matched)
     }
 
+    @Test
+    fun `ignores plate fragments that are too short`() {
+        val matched =
+            SmsMatcher.matches(
+                settings = sampleSettings(keywords = emptyList(), plateNumbers = listOf("123456")),
+                sender = "银行",
+                body = "验证码 123456，五分钟内有效。",
+            )
+
+        assertFalse(matched)
+    }
+
     private fun sampleSettings(
-        keywords: List<String> = SettingsStore.defaultKeywords,
+        keywords: List<String> = emptyList(),
         plateNumbers: List<String> = emptyList(),
     ): AppSettings {
         return AppSettings(

@@ -33,6 +33,7 @@
     <string name="summary_option_off">关</string>
     <string name="summary_alarm_sound_system">系统闹铃</string>
     <string name="notification_title">收到挪车短信</string>
+    <string name="notification_stop_action">停止响铃</string>
     <string name="alarm_channel_name">挪车提醒</string>
     <string name="alarm_channel_description">命中挪车短信后的高优先级报警通知</string>
     <string name="alarm_activity_title">收到疑似挪车短信</string>

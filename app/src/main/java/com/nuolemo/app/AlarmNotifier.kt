@@ -57,16 +57,18 @@ object AlarmNotifier {
             return
         }
 
-        NotificationManagerCompat.from(context).notify(
-            NOTIFICATION_ID,
-            baseBuilder(
-                context = context,
-                sender = sender,
-                body = body,
-                enableFullScreenIntent = true,
-                ongoing = true,
-            ).build(),
-        )
+        runCatching {
+            NotificationManagerCompat.from(context).notify(
+                NOTIFICATION_ID,
+                baseBuilder(
+                    context = context,
+                    sender = sender,
+                    body = body,
+                    enableFullScreenIntent = true,
+                    ongoing = true,
+                ).build(),
+            )
+        }
     }
 
     fun cancelAlarmNotification(context: Context) {
@@ -129,6 +131,11 @@ object AlarmNotifier {
             .setOngoing(ongoing)
             .setAutoCancel(!ongoing)
             .setContentIntent(alarmPendingIntent)
+            .addAction(
+                R.drawable.ic_notification,
+                context.getString(R.string.notification_stop_action),
+                AlarmStopReceiver.createPendingIntent(context),
+            )
             .apply {
                 if (enableFullScreenIntent) {
                     setFullScreenIntent(alarmPendingIntent, true)

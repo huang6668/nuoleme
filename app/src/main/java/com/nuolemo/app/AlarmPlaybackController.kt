@@ -46,16 +46,14 @@ object AlarmPlaybackController {
         body: String,
         owner: Owner,
         onStopped: (() -> Unit)? = null,
-    ) {
+    ): Boolean {
         val appContext = context.applicationContext
-        var previousListener: (() -> Unit)? = null
 
-        synchronized(lock) {
-            lastSender = sender
-            lastBody = body
-
+        return synchronized(lock) {
             val alreadyActive = currentOwner == owner && (mediaPlayer != null || vibrator != null)
             if (alreadyActive) {
+                lastSender = sender
+                lastBody = body
                 onStoppedListener = onStopped
                 if (settings.vibrate && vibrator == null) {
                     startVibrationLocked(appContext)
@@ -63,15 +61,24 @@ object AlarmPlaybackController {
                     cancelVibrationLocked()
                 }
                 scheduleStopLocked(settings.alarmDurationSeconds)
-                return
+                return@synchronized mediaPlayer != null || vibrator != null
             }
 
-            previousListener = stopLocked(notifyListener = currentOwner != null && currentOwner != owner)
+            // Changing playback owners is a handoff, not an alarm stop. Notifying the
+            // previous owner here can close AlarmActivity and cancel the service's
+            // foreground notification while the alarm is still active.
+            stopLocked(notifyListener = false)
             currentOwner = owner
+            lastSender = sender
+            lastBody = body
             onStoppedListener = onStopped
 
-            mediaPlayer = createAlarmPlayer(appContext).apply {
-                this?.start()
+            mediaPlayer = createAlarmPlayer(appContext)
+            mediaPlayer?.let { player ->
+                if (runCatching { player.start() }.isFailure) {
+                    runCatching { player.release() }
+                    mediaPlayer = null
+                }
             }
 
             if (settings.vibrate) {
@@ -79,9 +86,8 @@ object AlarmPlaybackController {
             }
 
             scheduleStopLocked(settings.alarmDurationSeconds)
+            mediaPlayer != null || vibrator != null
         }
-
-        previousListener?.invoke()
     }
 
     fun stop() {
@@ -111,12 +117,14 @@ object AlarmPlaybackController {
         timeoutRunnable?.let(mainHandler::removeCallbacks)
         timeoutRunnable = null
 
-        mediaPlayer?.runCatching {
-            if (isPlaying) {
-                stop()
+        mediaPlayer?.let { player ->
+            runCatching {
+                if (player.isPlaying) {
+                    player.stop()
+                }
+                player.release()
             }
         }
-        mediaPlayer?.release()
         mediaPlayer = null
 
         cancelVibrationLocked()
@@ -145,18 +153,21 @@ object AlarmPlaybackController {
                 .build()
 
         resolveAlarmUris().forEach { uri ->
-            val player =
+            var player: MediaPlayer? = null
+            val prepared =
                 runCatching {
-                    MediaPlayer().apply {
-                        setAudioAttributes(audioAttributes)
-                        isLooping = true
-                        setDataSource(context, uri)
-                        prepare()
-                    }
-                }.getOrNull()
-            if (player != null) {
+                    player =
+                        MediaPlayer().apply {
+                            setAudioAttributes(audioAttributes)
+                            isLooping = true
+                            setDataSource(context, uri)
+                            prepare()
+                        }
+                }.isSuccess
+            if (prepared) {
                 return player
             }
+            player?.let { failedPlayer -> runCatching { failedPlayer.release() } }
         }
 
         return null
@@ -187,16 +198,22 @@ object AlarmPlaybackController {
         vibrator = resolvedVibrator
         val pattern = longArrayOf(0, 450, 180, 450, 180, 600)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator?.vibrate(VibrationEffect.createWaveform(pattern, 0))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator?.vibrate(pattern, 0)
+        val started =
+            runCatching {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator?.vibrate(VibrationEffect.createWaveform(pattern, 0))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator?.vibrate(pattern, 0)
+                }
+            }.isSuccess
+        if (!started) {
+            vibrator = null
         }
     }
 
     private fun cancelVibrationLocked() {
-        vibrator?.cancel()
+        vibrator?.let { activeVibrator -> runCatching { activeVibrator.cancel() } }
         vibrator = null
     }
 }

@@ -6,11 +6,12 @@ import android.os.Build
 import android.os.IBinder
 
 class AlarmService : Service() {
+    private var preserveFallbackNotification = false
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        running = true
         AlarmNotifier.ensureAlarmChannel(this)
     }
 
@@ -21,31 +22,62 @@ class AlarmService : Service() {
                 return START_NOT_STICKY
             }
 
-            ACTION_START, null -> {
+            ACTION_START -> {
+                preserveFallbackNotification = false
                 val sender = intent?.getStringExtra(EXTRA_SENDER)
                 val body =
                     intent?.getStringExtra(EXTRA_SMS_BODY)
                         ?.takeIf { it.isNotBlank() }
                         ?: getString(R.string.test_sms_body)
 
-                startForeground(
-                    AlarmNotifier.NOTIFICATION_ID,
-                    AlarmNotifier.buildForegroundNotification(this, sender, body),
-                )
+                val foregroundStarted =
+                    runCatching {
+                        startForeground(
+                            AlarmNotifier.NOTIFICATION_ID,
+                            AlarmNotifier.buildForegroundNotification(this, sender, body),
+                        )
+                    }.isSuccess
+                if (!foregroundStarted) {
+                    running = false
+                    stopForegroundCompat()
+                    AlarmNotifier.showUrgentAlarmNotification(this, sender, body)
+                    preserveFallbackNotification = true
+                    stopSelf(startId)
+                    return START_NOT_STICKY
+                }
 
-                AlarmPlaybackController.start(
-                    context = this,
-                    settings = SettingsStore.load(this),
-                    sender = sender,
-                    body = body,
-                    owner = AlarmPlaybackController.Owner.SERVICE,
-                    onStopped = { stopAlarmAndSelf(fromPlaybackCallback = true) },
-                )
+                val playbackStarted =
+                    runCatching {
+                        AlarmPlaybackController.start(
+                            context = this,
+                            settings = SettingsStore.load(this),
+                            sender = sender,
+                            body = body,
+                            owner = AlarmPlaybackController.Owner.SERVICE,
+                            onStopped = { stopAlarmAndSelf(fromPlaybackCallback = true) },
+                        )
+                    }.getOrDefault(false)
+                if (!playbackStarted) {
+                    running = false
+                    AlarmPlaybackController.stopIfOwnedBy(
+                        owner = AlarmPlaybackController.Owner.SERVICE,
+                        notifyListener = false,
+                    )
+                    stopForegroundCompat()
+                    AlarmNotifier.showUrgentAlarmNotification(this, sender, body)
+                    preserveFallbackNotification = true
+                    stopSelf(startId)
+                    return START_NOT_STICKY
+                }
+                running = true
+                return START_NOT_STICKY
+            }
+
+            else -> {
+                stopSelf(startId)
                 return START_NOT_STICKY
             }
         }
-
-        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
@@ -53,15 +85,20 @@ class AlarmService : Service() {
             owner = AlarmPlaybackController.Owner.SERVICE,
             notifyListener = false,
         )
-        stopForegroundCompat()
-        AlarmNotifier.cancelAlarmNotification(this)
+        if (!preserveFallbackNotification) {
+            stopForegroundCompat()
+            AlarmNotifier.cancelAlarmNotification(this)
+        }
         running = false
         super.onDestroy()
     }
 
     private fun stopAlarmAndSelf(fromPlaybackCallback: Boolean) {
         if (!fromPlaybackCallback) {
-            AlarmPlaybackController.stopIfOwnedBy(AlarmPlaybackController.Owner.SERVICE)
+            AlarmPlaybackController.stopIfOwnedBy(
+                owner = AlarmPlaybackController.Owner.SERVICE,
+                notifyListener = false,
+            )
         }
         stopForegroundCompat()
         AlarmNotifier.cancelAlarmNotification(this)

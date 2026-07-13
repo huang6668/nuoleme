@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import java.lang.ref.WeakReference
 
 class AlarmActivity : AppCompatActivity() {
     private val handoffHandler = Handler(Looper.getMainLooper())
@@ -47,20 +48,20 @@ class AlarmActivity : AppCompatActivity() {
         bodyText = findViewById(R.id.textAlarmBody)
         slideToStopView = findViewById(R.id.slideToStopAlarm)
 
-        sender = intent.getStringExtra(AlarmService.EXTRA_SENDER)
-        body =
-            intent.getStringExtra(AlarmService.EXTRA_SMS_BODY)
-                ?.takeIf { it.isNotBlank() }
-                ?: getString(R.string.test_sms_body)
-
-        senderText.text = sender ?: getString(R.string.test_sender)
-        bodyText.text = body
+        applyAlarmIntent(intent)
 
         slideToStopView.setOnSlideCompleteListener {
             AlarmStopReceiver.stopAlarm(this)
             finish()
         }
 
+        tryStartAlarmService()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyAlarmIntent(intent)
         tryStartAlarmService()
     }
 
@@ -77,16 +78,18 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         handoffHandler.removeCallbacksAndMessages(null)
-        if (isFinishing) {
-            AlarmPlaybackController.stopIfOwnedBy(
-                owner = AlarmPlaybackController.Owner.ACTIVITY,
-                notifyListener = false,
-            )
-            if (!AlarmService.isRunning()) {
-                AlarmNotifier.cancelAlarmNotification(this)
-            }
-        }
         super.onDestroy()
+    }
+
+    private fun applyAlarmIntent(intent: Intent) {
+        sender = intent.getStringExtra(AlarmService.EXTRA_SENDER)
+        body =
+            intent.getStringExtra(AlarmService.EXTRA_SMS_BODY)
+                ?.takeIf { it.isNotBlank() }
+                ?: getString(R.string.test_sms_body)
+
+        senderText.text = sender ?: getString(R.string.test_sender)
+        bodyText.text = body
     }
 
     private fun tryStartAlarmService() {
@@ -117,23 +120,30 @@ class AlarmActivity : AppCompatActivity() {
         }
 
         statusText.text = getString(R.string.alarm_activity_fallback)
-        AlarmPlaybackController.start(
-            context = this,
-            settings = SettingsStore.load(this),
-            sender = sender,
-            body = body,
-            owner = AlarmPlaybackController.Owner.ACTIVITY,
-            onStopped = {
-                AlarmNotifier.cancelAlarmNotification(this)
-                if (!isFinishing && !isDestroyed) {
-                    finish()
-                }
-            },
-        )
+        val appContext = applicationContext
+        val activityReference = WeakReference(this)
+        runCatching {
+            AlarmPlaybackController.start(
+                context = this,
+                settings = SettingsStore.load(this),
+                sender = sender,
+                body = body,
+                owner = AlarmPlaybackController.Owner.ACTIVITY,
+                onStopped = {
+                    AlarmNotifier.cancelAlarmNotification(appContext)
+                    activityReference.get()?.let { activity ->
+                        if (!activity.isFinishing && !activity.isDestroyed) {
+                            activity.finish()
+                        }
+                    }
+                },
+            )
+        }
         AlarmNotifier.showUrgentAlarmNotification(this, sender, body)
     }
 
     private fun configureAlarmWindow() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -141,8 +151,7 @@ class AlarmActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             window.addFlags(
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
             )
         }
     }

@@ -14,15 +14,16 @@ object SettingsPresentation {
     }
 
     fun rulesOverview(context: Context, settings: AppSettings): String {
+        val keywordCount = SettingsStore.activeKeywords(settings.keywords).size
         return if (settings.plateNumbers.isEmpty()) {
             context.getString(
                 R.string.home_rules_overview_no_plate,
-                settings.keywords.size,
+                keywordCount,
             )
         } else {
             context.getString(
                 R.string.home_rules_overview,
-                settings.keywords.size,
+                keywordCount,
                 settings.plateNumbers.size,
             )
         }

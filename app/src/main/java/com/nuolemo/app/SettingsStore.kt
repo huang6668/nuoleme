@@ -36,8 +36,8 @@ object SettingsStore {
         val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return AppSettings(
             enabled = prefs.getBoolean(KEY_ENABLED, true),
-            keywords = sanitizeKeywords(
-                prefs.getString(KEY_KEYWORDS, defaultKeywords.joinToString(separator = "\n")).orEmpty(),
+            keywords = sanitizeCustomKeywords(
+                prefs.getString(KEY_KEYWORDS, "").orEmpty(),
             ),
             plateNumbers = sanitizePlateNumbers(
                 prefs.getString(KEY_PLATE_NUMBERS, "").orEmpty(),
@@ -50,7 +50,7 @@ object SettingsStore {
     }
 
     fun save(context: Context, settings: AppSettings) {
-        val sanitizedKeywords = sanitizeKeywords(formatEditorInput(settings.keywords))
+        val sanitizedKeywords = sanitizeCustomKeywords(formatEditorInput(settings.keywords))
         val sanitizedPlates = sanitizePlateNumbers(formatEditorInput(settings.plateNumbers))
         context.applicationContext
             .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -66,10 +66,20 @@ object SettingsStore {
 
     fun sanitizeKeywords(rawInput: String): List<String> = splitAndClean(rawInput)
 
+    fun activeKeywords(customKeywords: List<String>): List<String> {
+        return (defaultKeywords + customKeywords).distinctBy { it.lowercase(Locale.ROOT) }
+    }
+
     fun sanitizePlateNumbers(rawInput: String): List<String> =
         splitAndClean(rawInput).map { it.uppercase(Locale.ROOT) }
 
     fun formatEditorInput(values: List<String>): String = values.joinToString(separator = "\n")
+
+    private fun sanitizeCustomKeywords(rawInput: String): List<String> {
+        return sanitizeKeywords(rawInput).filterNot { keyword ->
+            defaultKeywords.any { defaultKeyword -> defaultKeyword.equals(keyword, ignoreCase = true) }
+        }
+    }
 
     private fun splitAndClean(rawInput: String): List<String> {
         val seen = linkedSetOf<String>()
