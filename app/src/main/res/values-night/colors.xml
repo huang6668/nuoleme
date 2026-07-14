@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_primary">#6366F1</color>
-    <color name="brand_secondary">#34D399</color>
-    <color name="screen_background">#0F172A</color>
-    <color name="card_surface">#1E293B</color>
-    <color name="outline_soft">#334155</color>
-    <color name="text_primary">#F8FAFC</color>
-    <color name="text_secondary">#94A3B8</color>
+    <!-- iOS Green accent -->
+    <color name="brand_primary">#30D158</color>
+    <color name="brand_secondary">#30D158</color>
     
-    <color name="hero_ready">#064E3B</color>
-    <color name="hero_limited">#78350F</color>
-    <color name="hero_attention">#7F1D1D</color>
-    <color name="hero_paused">#1E293B</color>
-    <color name="hero_text_primary">#F8FAFC</color>
-    <color name="hero_text_secondary">#A7F3D0</color>
+    <!-- iOS Dark Mode Backgrounds -->
+    <color name="screen_background">#000000</color>
+    <color name="card_surface">#1C1C1E</color>
+    <color name="outline_soft">#38383A</color>
     
-    <color name="info_surface">#1E1B4B</color>
-    <color name="icon_tile_surface">#312E81</color>
+    <!-- iOS Dark Mode Typography -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#8E8E93</color>
     
-    <color name="status_good_bg">#14532D</color>
-    <color name="status_good_fg">#4ADE80</color>
-    <color name="status_warning_bg">#78350F</color>
-    <color name="status_warning_fg">#FBBF24</color>
-    <color name="status_danger_bg">#7F1D1D</color>
-    <color name="status_danger_fg">#F87171</color>
+    <color name="hero_ready">#30D158</color>
+    <color name="hero_limited">#FF9F0A</color>
+    <color name="hero_attention">#FF453A</color>
+    <color name="hero_paused">#38383A</color>
+    <color name="hero_text_primary">#FFFFFF</color>
+    <color name="hero_text_secondary">#E5E5EA</color>
+    
+    <color name="info_surface">#1C1C1E</color>
+    <color name="icon_tile_surface">#2C2C2E</color>
+    
+    <color name="status_good_bg">#143823</color>
+    <color name="status_good_fg">#30D158</color>
+    <color name="status_warning_bg">#4D3003</color>
+    <color name="status_warning_fg">#FF9F0A</color>
+    <color name="status_danger_bg">#4D1512</color>
+    <color name="status_danger_fg">#FF453A</color>
 </resources>

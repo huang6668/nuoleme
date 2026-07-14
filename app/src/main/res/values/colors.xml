@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_primary">#4F46E5</color>
-    <color name="brand_secondary">#10B981</color>
-    <color name="screen_background">#F8FAFC</color>
+    <!-- iOS Green accent -->
+    <color name="brand_primary">#34C759</color>
+    <color name="brand_secondary">#34C759</color>
+    
+    <!-- iOS Light Mode Backgrounds -->
+    <color name="screen_background">#F2F2F7</color>
     <color name="card_surface">#FFFFFF</color>
-    <color name="outline_soft">#E2E8F0</color>
-    <color name="text_primary">#0F172A</color>
-    <color name="text_secondary">#64748B</color>
+    <color name="outline_soft">#E5E5EA</color>
     
-    <color name="hero_ready">#0F766E</color>
-    <color name="hero_limited">#B45309</color>
-    <color name="hero_attention">#991B1B</color>
-    <color name="hero_paused">#334155</color>
+    <!-- iOS Light Mode Typography -->
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#8E8E93</color>
+    
+    <!-- iOS Status/Hero specific -->
+    <color name="hero_ready">#34C759</color>
+    <color name="hero_limited">#FF9500</color>
+    <color name="hero_attention">#FF3B30</color>
+    <color name="hero_paused">#8E8E93</color>
     <color name="hero_text_primary">#FFFFFF</color>
-    <color name="hero_text_secondary">#CCFBF1</color>
+    <color name="hero_text_secondary">#E5E5EA</color>
     
-    <color name="info_surface">#EEF2FF</color>
-    <color name="icon_tile_surface">#EEF2FF</color>
+    <color name="info_surface">#FFFFFF</color>
+    <color name="icon_tile_surface">#E5E5EA</color>
     
-    <color name="status_good_bg">#DCFCE7</color>
-    <color name="status_good_fg">#166534</color>
-    <color name="status_warning_bg">#FEF3C7</color>
-    <color name="status_warning_fg">#92400E</color>
-    <color name="status_danger_bg">#FEE2E2</color>
-    <color name="status_danger_fg">#B91C1C</color>
+    <color name="status_good_bg">#E5F9E7</color>
+    <color name="status_good_fg">#34C759</color>
+    <color name="status_warning_bg">#FFF4E5</color>
+    <color name="status_warning_fg">#FF9500</color>
+    <color name="status_danger_bg">#FFECEB</color>
+    <color name="status_danger_fg">#FF3B30</color>
     
-    <color name="alarm_gradient_start">#7F1D1D</color>
-    <color name="alarm_gradient_center">#B91C1C</color>
-    <color name="alarm_gradient_end">#EF4444</color>
-    <color name="alarm_card_surface">#FFF1F2</color>
-    <color name="alarm_text_primary">#4C0519</color>
-    <color name="alarm_text_secondary">#9F1239</color>
-    <color name="alarm_highlight">#E11D48</color>
-    <color name="alarm_button_bg">#BE123C</color>
-    <color name="alarm_slide_track">#FFE4E6</color>
+    <!-- Alarm Activity -->
+    <color name="alarm_gradient_start">#FF3B30</color>
+    <color name="alarm_gradient_center">#FF453A</color>
+    <color name="alarm_gradient_end">#FF6961</color>
+    <color name="alarm_card_surface">#FFFFFF</color>
+    <color name="alarm_text_primary">#000000</color>
+    <color name="alarm_text_secondary">#8E8E93</color>
+    <color name="alarm_highlight">#FF3B30</color>
+    <color name="alarm_button_bg">#FF3B30</color>
+    <color name="alarm_slide_track">#E5E5EA</color>
 </resources>
