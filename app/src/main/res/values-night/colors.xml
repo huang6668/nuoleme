@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_primary">#9CB4FF</color>
-    <color name="brand_secondary">#6FD5BD</color>
-    <color name="screen_background">#10141C</color>
-    <color name="card_surface">#191F29</color>
-    <color name="outline_soft">#2B3543</color>
-    <color name="text_primary">#F3F5F8</color>
-    <color name="text_secondary">#AEB8C7</color>
-    <color name="info_surface">#222D47</color>
-    <color name="icon_tile_surface">#222D47</color>
+    <color name="brand_primary">#6366F1</color>
+    <color name="brand_secondary">#34D399</color>
+    <color name="screen_background">#0F172A</color>
+    <color name="card_surface">#1E293B</color>
+    <color name="outline_soft">#334155</color>
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+    
+    <color name="hero_ready">#064E3B</color>
+    <color name="hero_limited">#78350F</color>
+    <color name="hero_attention">#7F1D1D</color>
+    <color name="hero_paused">#1E293B</color>
+    <color name="hero_text_primary">#F8FAFC</color>
+    <color name="hero_text_secondary">#A7F3D0</color>
+    
+    <color name="info_surface">#1E1B4B</color>
+    <color name="icon_tile_surface">#312E81</color>
+    
+    <color name="status_good_bg">#14532D</color>
+    <color name="status_good_fg">#4ADE80</color>
+    <color name="status_warning_bg">#78350F</color>
+    <color name="status_warning_fg">#FBBF24</color>
+    <color name="status_danger_bg">#7F1D1D</color>
+    <color name="status_danger_fg">#F87171</color>
 </resources>
