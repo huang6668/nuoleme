@@ -2,10 +2,36 @@
 
 [![Android Build](https://github.com/huang6668/nuoleme/actions/workflows/android-build.yml/badge.svg)](https://github.com/huang6668/nuoleme/actions/workflows/android-build.yml)
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/huang6668/nuoleme/main/docs/assets/hero_screenshot.webp" alt="挪了么 首页" width="300" style="margin-right: 20px"/>
-  <img src="https://raw.githubusercontent.com/huang6668/nuoleme/main/docs/assets/alarm_screenshot.webp" alt="挪了么 报警页" width="300"/>
-</p>
+<div align="center">
+  <h1>🚗 挪了么 (Nuoleme)</h1>
+  <p><strong>一个离线、轻量、零常驻的 Android 挪车短信提醒守护神</strong></p>
+</div>
+
+## 架构与工作原理 (0 常驻)
+
+本项目秉持“平时绝对安静，遇事高可靠提醒”的原则。完全抛弃了后台常驻服务和轮询唤醒机制，通过以下架构实现 0 功耗待机：
+
+```mermaid
+sequenceDiagram
+    participant OS as Android 系统
+    participant Receiver as SmsReceiver
+    participant Service as AlarmService
+    participant UI as 全屏通知兜底
+
+    OS->>Receiver: 收到新短信 (SMS_RECEIVED 广播)
+    Note over Receiver: App 被动唤醒，无后台常驻
+    Receiver->>Receiver: 本地规则引擎匹配 (纯离线不过网)
+    
+    alt 命中关键词或车牌
+        Receiver->>Service: 尝试启动 AlarmService
+        Note over Service: 拉满媒体音量，强力震动报警
+        
+        alt 遭遇 Android 12+ 后台启动限制
+            Receiver->>UI: 触发高优先级 Full-Screen Intent
+            Note over UI: 强制点亮屏幕，锁屏覆盖提醒
+        end
+    end
+```
 
 挪了么是一个离线、轻量、零常驻的 Android 挪车短信提醒 App。它的目标很直接：当你收到“挪车 / 移车 / 车牌命中”的短信时，不是只给你一个容易错过的普通通知，而是尽量像系统闹铃一样把你叫出来。
 
