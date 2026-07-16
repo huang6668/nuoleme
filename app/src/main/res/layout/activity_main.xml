@@ -38,7 +38,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="@string/app_name"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_car"
                         app:tint="@color/brand_primary" />
                 </FrameLayout>
@@ -109,7 +109,7 @@
                                 android:id="@+id/imageGuardStatus"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:contentDescription="@string/card_guard_title"
+                                android:importantForAccessibility="no"
                                 android:src="@drawable/ic_shield_check" />
                         </FrameLayout>
 

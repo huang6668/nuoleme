@@ -28,7 +28,7 @@
             <ImageView
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:contentDescription="@string/app_name"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_car"
                 app:tint="@color/alarm_highlight" />
 
